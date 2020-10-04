@@ -7,31 +7,52 @@
   </head>
   <body>
     <div class="headerContainer">
-      <h2>
-        Perceptron visualizer
-      </h2>
+      <h2>Perceptron visualizer</h2>
       <p>
-      Click inside the frame to place some dots. Switch colors with the button below the frame. Perceptrons should be able to separate the two classes of dots as long as they can be separated by a straight a line.
+        Click inside the frame to place some dots. Switch colors with the button
+        below the frame. Perceptrons should be able to separate the two classes
+        of dots as long as they can be separated by a straight a line.
       </p>
     </div>
     <div class="canvasContainer">
       <canvas id="myCanvas" width="400" height="400"> </canvas>
     </div>
     <div class="inputContainer">
-      <button class="inputItem" id="colorButton" onclick="switchColor()">Switch dot color</button>
+      <button class="inputItem" id="colorButton" onclick="switchColor()">
+        Switch dot color
+      </button>
       <label for="threshold">Threshold</label>
-      <input class="inputItem" type="number" id="threshold" name="threshold" min="-10000" max="10000" value="0.0">
-      </input>
+      <input
+        class="inputItem"
+        type="number"
+        id="threshold"
+        name="threshold"
+        min="-10000"
+        max="10000"
+        value="0.0"
+      />
       <label for="l_rate">Learning rate</label>
-      <input class="inputItem" type="number" id="l_rate" name="learning_rate" min="0" max="10000" value="1.0">
-      </input>
+      <input
+        class="inputItem"
+        type="number"
+        id="l_rate"
+        name="learning_rate"
+        min="0"
+        max="10000"
+        value="1.0"
+      />
       <label for="iterations">Iterations</label>
-      <input class="inputItem" type="number" id="iterations" name="iterations" min="1" max="100000" value="1000">
-      </input>
+      <input
+        class="inputItem"
+        type="number"
+        id="iterations"
+        name="iterations"
+        min="1"
+        max="100000"
+        value="1000"
+      />
     </div>
   </body>
-
-
 
   <script src="js/canvas-helpers.js"></script>
   <script src="js/perceptron.js"></script>
@@ -44,25 +65,24 @@
     }
 
     var coords = [];
-    const weights = [ 0.0, 0.0, 0.0 ]
-    
+    const weights = [0.0, 0.0, 0.0];
 
-    const threshold = document.getElementById("threshold")
-    const lRate = document.getElementById("l_rate")
-    const numEpochs = document.getElementById("iterations")
+    const threshold = document.getElementById("threshold");
+    const lRate = document.getElementById("l_rate");
+    const numEpochs = document.getElementById("iterations");
 
-    let thresholdValue = threshold.value
-    let lRateValue = lRate.value
-    let numEpochsValue = numEpochs.value
+    let thresholdValue = threshold.value;
+    let lRateValue = lRate.value;
+    let numEpochsValue = numEpochs.value;
 
-    threshold.addEventListener('change', (event) => {
-      thresholdValue = event.target.value
+    threshold.addEventListener("change", (event) => {
+      thresholdValue = event.target.value;
     });
-    l_rate.addEventListener('change', (event) => {
-      lRateValue = event.target.value
+    l_rate.addEventListener("change", (event) => {
+      lRateValue = event.target.value;
     });
-    numEpochs.addEventListener('change', (event) => {
-      numEpochsValue = event.target.value
+    numEpochs.addEventListener("change", (event) => {
+      numEpochsValue = event.target.value;
     });
 
     var canvas = document.getElementById("myCanvas");
@@ -71,10 +91,8 @@
       context.clearRect(0, 0, canvas.width, canvas.height);
       onCanvasClick(canvas, currColor, coords, e);
       drawDots(context, coords);
-      trainWeights(numEpochsValue, coords, weights, lRateValue, thresholdValue)
+      trainWeights(numEpochsValue, coords, weights, lRateValue, thresholdValue);
       console.log("Weights: " + weights);
-
-
 
       // weights[0] * 1.0 + weights[1] * x1 + weights[2] * x2 = threshold
       // weights[1] * x1 = threshold - weights[0] * 1.0 - weights[2] * x2
@@ -84,23 +102,22 @@
       // weights[2] * x2 = threshold - weights[0] * 1.0 - weights[1] * x1
       // x2 = (threshold - weights[0] * 1.0 - weights[1] * x1) / weights[2]
 
-      const constant = (thresholdValue - weights[0] * 1.0) / weights[2]
-      const growth = (-weights[1] / weights[2])
+      const constant = (thresholdValue - weights[0] * 1.0) / weights[2];
+      const growth = -weights[1] / weights[2];
 
-      const x1 = -200
-      const y1 = constant + growth * x1
+      const x1 = -200;
+      const y1 = constant + growth * x1;
 
-      const x2 = 200
-      const y2 = constant + growth * x2
+      const x2 = 200;
+      const y2 = constant + growth * x2;
 
-      console.log("x1: " + x1 + " y1: " + y1)
-      console.log("x2: " + x2 + " y2: " + y2)
-      console.log("y = " + (constant) + " + " + (growth) + "x")
+      console.log("x1: " + x1 + " y1: " + y1);
+      console.log("x2: " + x2 + " y2: " + y2);
+      console.log("y = " + constant + " + " + growth + "x");
 
       context.moveTo(x1 + 200, 400 - (y1 + 200));
       context.lineTo(x2 + 200, 400 - (y2 + 200));
       context.stroke();
     });
-    
   </script>
 </html>
