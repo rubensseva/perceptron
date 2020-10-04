@@ -6,24 +6,64 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    This should show a perceptron
+    <div class="headerContainer">
+      <h2>
+        Perceptron visualizer
+      </h2>
+      <p>
+      Click inside the frame to place some dots. Switch colors with the button below the frame. Perceptrons should be able to separate the two classes of dots as long as they can be separated by a straight a line.
+      </p>
+    </div>
     <div class="canvasContainer">
       <canvas id="myCanvas" width="400" height="400"> </canvas>
     </div>
-    <button onclick="switchColor()">Switch dot color</button>
+    <div class="inputContainer">
+      <button class="inputItem" id="colorButton" onclick="switchColor()">Switch dot color</button>
+      <label for="threshold">Threshold</label>
+      <input class="inputItem" type="number" id="threshold" name="threshold" min="-10000" max="10000" value="0.0">
+      </input>
+      <label for="l_rate">Learning rate</label>
+      <input class="inputItem" type="number" id="l_rate" name="learning_rate" min="0" max="10000" value="1.0">
+      </input>
+      <label for="iterations">Iterations</label>
+      <input class="inputItem" type="number" id="iterations" name="iterations" min="1" max="100000" value="1000">
+      </input>
+    </div>
   </body>
+
+
+
   <script src="js/canvas-helpers.js"></script>
   <script src="js/perceptron.js"></script>
   <script>
     var currColor = "blue";
+    document.getElementById("colorButton").style.color = currColor;
     function switchColor() {
       currColor = currColor === "blue" ? "red" : "blue";
+      document.getElementById("colorButton").style.color = currColor;
     }
+
     var coords = [];
     const weights = [ 0.0, 0.0, 0.0 ]
-    const threshold = 0.0
-    const l_rate = 1.0
-    const num_epochs = 10000
+    
+
+    const threshold = document.getElementById("threshold")
+    const lRate = document.getElementById("l_rate")
+    const numEpochs = document.getElementById("iterations")
+
+    let thresholdValue = threshold.value
+    let lRateValue = lRate.value
+    let numEpochsValue = numEpochs.value
+
+    threshold.addEventListener('change', (event) => {
+      thresholdValue = event.target.value
+    });
+    l_rate.addEventListener('change', (event) => {
+      lRateValue = event.target.value
+    });
+    numEpochs.addEventListener('change', (event) => {
+      numEpochsValue = event.target.value
+    });
 
     var canvas = document.getElementById("myCanvas");
     var context = canvas.getContext("2d");
@@ -31,7 +71,7 @@
       context.clearRect(0, 0, canvas.width, canvas.height);
       onCanvasClick(canvas, currColor, coords, e);
       drawDots(context, coords);
-      trainWeights(num_epochs, coords, weights, l_rate, threshold)
+      trainWeights(numEpochsValue, coords, weights, lRateValue, thresholdValue)
       console.log("Weights: " + weights);
 
 
@@ -44,8 +84,7 @@
       // weights[2] * x2 = threshold - weights[0] * 1.0 - weights[1] * x1
       // x2 = (threshold - weights[0] * 1.0 - weights[1] * x1) / weights[2]
 
-
-      const constant = (threshold - weights[0] * 1.0) / weights[2]
+      const constant = (thresholdValue - weights[0] * 1.0) / weights[2]
       const growth = (-weights[1] / weights[2])
 
       const x1 = -200

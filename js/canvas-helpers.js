@@ -2,11 +2,8 @@ function onCanvasClick(canvas, color, coords, event) {
   let rect = canvas.getBoundingClientRect();
   let x = event.clientX - rect.left;
   let y = event.clientY - rect.top;
-  console.log(" org Coordinate x: " + x, "Coordinate y: " + y);
   console.log((400 - y) - 200)
   coords.push({ coords: [1.0, x - 200, (400 - y) - 200 ], color: color === 'blue' ? 1.0 : 0.0 });
-  console.log("Coords: " + JSON.stringify(coords));
-
 }
 
 
