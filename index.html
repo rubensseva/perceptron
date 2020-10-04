@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <title>title</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="script.js"></script>
   </head>
   <body>
     This should show a perceptron
@@ -14,20 +13,55 @@
     <button onclick="switchColor()">Switch dot color</button>
   </body>
   <script src="js/canvas-helpers.js"></script>
+  <script src="js/perceptron.js"></script>
   <script>
     var currColor = "blue";
     function switchColor() {
       currColor = currColor === "blue" ? "red" : "blue";
     }
     var coords = [];
+    const weights = [ 0.0, 0.0, 0.0 ]
+    const threshold = 0.0
+    const l_rate = 1.0
+    const num_epochs = 10000
 
     var canvas = document.getElementById("myCanvas");
     var context = canvas.getContext("2d");
     canvas.addEventListener("mousedown", function (e) {
-      onCanvasClick(canvas, context, currColor, coords, e);
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      onCanvasClick(canvas, currColor, coords, e);
+      drawDots(context, coords);
+      trainWeights(num_epochs, coords, weights, l_rate, threshold)
+      console.log("Weights: " + weights);
+
+
+
+      // weights[0] * 1.0 + weights[1] * x1 + weights[2] * x2 = threshold
+      // weights[1] * x1 = threshold - weights[0] * 1.0 - weights[2] * x2
+      // x1 = (threshold - weights[0] * 1.0 - weights[2] * x2) / weights[1]
+
+      // weights[0] * 1.0 + weights[1] * x1 + weights[2] * x2 = threshold
+      // weights[2] * x2 = threshold - weights[0] * 1.0 - weights[1] * x1
+      // x2 = (threshold - weights[0] * 1.0 - weights[1] * x1) / weights[2]
+
+
+      const constant = (threshold - weights[0] * 1.0) / weights[2]
+      const growth = (-weights[1] / weights[2])
+
+      const x1 = -200
+      const y1 = constant + growth * x1
+
+      const x2 = 200
+      const y2 = constant + growth * x2
+
+      console.log("x1: " + x1 + " y1: " + y1)
+      console.log("x2: " + x2 + " y2: " + y2)
+      console.log("y = " + (constant) + " + " + (growth) + "x")
+
+      context.moveTo(x1 + 200, 400 - (y1 + 200));
+      context.lineTo(x2 + 200, 400 - (y2 + 200));
+      context.stroke();
     });
-    context.moveTo(0, 0);
-    context.lineTo(200, 100);
-    context.stroke();
+    
   </script>
 </html>
