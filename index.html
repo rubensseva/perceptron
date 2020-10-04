@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>title</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+  </head>
+  <body>
+    This should show a perceptron
+    <div class="canvasContainer">
+      <canvas id="myCanvas" width="400" height="400">
+      </canvas>
+    </div>
+    <button onclick="switchColor()">Switch dot color</button>
+  </body>
+  <script src="js/canvas-helpers.js"></script>
+  <script>
+    var currColor = 'blue'
+    function switchColor() {
+      currColor = currColor === 'blue' ? 'red' : 'blue'
+    }
+    var coords = [];
+
+
+    var canvas = document.getElementById("myCanvas");
+    var context = canvas.getContext("2d");
+    canvas.addEventListener("mousedown", function(e) {
+      onCanvasClick(canvas, context, currColor, coords, e);
+    })
+    context.moveTo(0, 0);
+    context.lineTo(200, 100);
+    context.stroke();
+  </script>
+</html>
